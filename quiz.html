@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+ <head>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <title>Assignment-Quiz Module</title>
+        <style>
+          #status
+          {
+            display:none;
+            background-color: red;
+            border-radius: 4px;
+          }
+          #next,#submitq,#restart
+          {
+            display:none;
+          }
+          #heading
+          {
+            color: white;
+            background-color: #4d4d4d;
+            font-size: 48px;
+          }
+          #a
+          {
+            background-color: green;
+          }
+        </style>
+    </head>
+<body>
+        <h1 id="heading" align="center">Quiz</h1>
+        <h1><span id="ak"></span><h1>
+<div class="quiz-container">
+  <div class="container">
+    <div class="jumbotron">
+  <div id="quiz"></div>
+  <div id="questionTitle"></div>
+  <div id="options">
+</div>
+<input type = "button" class="btn btn-danger btn-lg" value="Incorrect" id="status"><br>
+<input type = "button" class="btn btn-warning" value="Submit" id="submit">
+<input type ="button" class="btn btn-success" value="Next" id="next"></input>
+</div>
+</div>
+</div>
+<button id="submitq">Submit Quiz</button>
+<button id="restart" class="btn btn-primary">Restart</button>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<script>
+(function(){
+var question = document.getElementById('questionTitle');
+var option = document.getElementById('options');
+var quizContainer = document.getElementsByClassName("quiz-container");
+var heading = document.getElementById("heading");
+var ansKey = document.getElementById("ak");
+
+
+  function buildQuiz(i){
+  question.innerHTML = myQuestions[i].question;
+  option.innerHTML = 
+  `<small><input type="radio" id="0" class="myRadio" name="op">${myQuestions[i].answers[0]}<br>
+  <input type="radio" id="1" class="myRadio" name="op">${myQuestions[i].answers[1]}<br>
+  <input type="radio" id="2" class="myRadio" name="op">${myQuestions[i].answers[2]}<br>
+  <input type="radio" id="3" class="myRadio" name="op">${myQuestions[i].answers[3]}</small>`;
+}
+
+
+  function showResults(){
+    question.innerHTML = '';
+    option.innerHTML='';
+    statusButton.style.display='none';
+    submitQuiz.style.display='none';
+    retakeButton.style.display="block";
+    var result = '<ul>';
+     for(var i=0;i<myQuestions.length;i++)
+     {
+    result += `<li>${myQuestions[i].question}` + " - " + `<span id="a">${myQuestions[i].answers[myQuestions[i].correctAnswer]}</span></li>`;
+  }
+  result +='</ul>'
+  ansKey.innerHTML = "Answer Key";
+  heading.innerHTML = `Score:${numCorrect}`
+  quizContainer.innerHTML=result;
+  }
+
+var statusButton = document.getElementById("status");
+  var numCorrect = 0;
+
+  function showStatus(n) {
+   for(var num=0;num<4;num++){
+    if(document.getElementById(num).checked)
+    {
+      var selected = document.getElementById(num).id;
+    }
+  }
+      if(selected === undefined) 
+      {
+          alert("Please select an option.");
+      }
+      else {
+              
+    document.getElementById("0").disabled = true;
+    document.getElementById("1").disabled = true;
+    document.getElementById("2").disabled = true;
+    document.getElementById("3").disabled = true;
+      if(selected==myQuestions[n].correctAnswer)
+      {
+         statusButton.value="Correct";
+         statusButton.className ="btn btn-success";
+         statusButton.style.backgroundColor="green";
+         statusButton.style.display = 'block';
+         numCorrect += myQuestions[n].score;
+  
+      }
+       else if(selected!=myQuestions[n].correctAnswer)
+      {
+         statusButton.value="Incorrect";
+         statusButton.className ="btn btn-danger";
+         statusButton.style.backgroundColor="red";
+        statusButton.style.display = 'block';
+      }
+      if(n!=myQuestions.length-1)
+      {
+        submitButton.style.display = 'none'; 
+      nextButton.style.display = 'block';
+      nextButton.addEventListener("click",clickNext);
+    }
+    else {
+      submitButton.style.display = 'none'; 
+      submitQuiz.style.display="block";
+    }
+  }
+    }
+    
+function clickSubmit()
+{ 
+
+    showStatus(thisQuestion);
+  }
+    
+  function restartQuiz()
+  {
+
+    heading.innerHTML = 'Quiz';
+    ansKey.innerHTML ='';
+    quizContainer.innerHTML='';
+    retakeButton.style.display = 'none';
+    thisQuestion=0;
+    submitButton.style.display = 'block';
+    buildQuiz(thisQuestion);
+     document.getElementById("0").disabled = false;
+     document.getElementById("1").disabled = false;
+     document.getElementById("2").disabled = false;
+     document.getElementById("3").disabled = false;
+
+  }
+  
+
+  function clickNext() {
+     document.getElementById("0").disabled = false;
+     document.getElementById("1").disabled = false;
+     document.getElementById("2").disabled = false;
+     document.getElementById("3").disabled = false;
+      statusButton.style.display = 'none';
+      nextButton.style.display = 'none';
+      submitButton.style.display = 'block';
+      thisQuestion+=1;
+      buildQuiz(thisQuestion);
+  }
+
+ var radioButtons = document.getElementsByClassName("myRadio");
+
+  var quizContainer = document.getElementById('quiz');
+  var resultsContainer = document.getElementById('results');
+  var submitButton = document.getElementById('submit');
+var myQuestions = [{
+        question:"A complete graph can have",
+        answers:["nn 2-spanning trees","n 2-spanning trees","tall trees","short trees"],
+        correctAnswer:0,
+        score:1
+    },{
+        question:"What is the full form of CSS",
+        answers:["Color Super Scheme","Colour Style Schema","Color Style Sheets","None"],
+        correctAnswer:3,
+        score:1
+    },{
+        question:"How to include JavaScript in HTML documents",
+        answers:["sweet","script","scripts","none"],
+        correctAnswer:1,
+        score:1
+    },{
+        question:"How to declare variable in javaScript",
+        answers:["vat","Var","var","war"],
+        correctAnswer:2,
+        score:1
+    },{
+        question:"What => means in javaScript",
+        answers:["Arrow Function","Not Function","EqualToGreaterThan Function","None"],
+        correctAnswer:0,
+        score:1
+    },{
+        question:"Which of these is not a javaScript framework",
+        answers:["Angular","Jquery","Django","BootStrap"],
+        correctAnswer:2,
+        score:1
+    },{
+        question:"How do you define objects in javaScript",
+        answers:["{}","~~","obj","||"],
+        correctAnswer:0,
+        score:1
+    },{
+        question:"Which of these is not a valid js version",
+        answers:["ES1","ES2","ES5","EX19"],
+        correctAnswer:3,
+        score:1
+    },{
+        question:"What is the output of '2' + 2",
+        answers:["22","4","2","none"],
+        correctAnswer:0,
+        score:1
+    },{
+        question:"What is the output of '2' - 1",
+        answers:["1","3","2","456"],
+        correctAnswer:0,
+        score:1
+    }//,{
+        //question:"How to check if a value is NaN in javascript",
+        //answers:["valIsNaN","isNaN(val)","NaN","NaN()"],
+        //correctAnswer:1,
+        //score:1
+    //}
+    ];
+
+  var thisQuestion=0;
+  buildQuiz(thisQuestion);
+
+  var nextButton = document.getElementById("next");
+  var submitButton = document.getElementById("submit");
+  var submitQuiz = document.getElementById("submitq");
+  var retakeButton = document.getElementById("restart");
+  
+
+  submitButton.addEventListener("click", clickSubmit);
+  submitQuiz.addEventListener("click", showResults);
+  retakeButton.addEventListener("click",restartQuiz);
+})();
+</script>
+</html>
+
